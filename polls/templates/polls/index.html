@@ -1,0 +1,9 @@
+{% if latest_video_list %}
+    <ul>
+        {% for video in latest_video_list %}
+            <li>{{ video.video_name }}}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No Data</p>
+{% endif %}
