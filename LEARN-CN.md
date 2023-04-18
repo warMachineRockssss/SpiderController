@@ -85,5 +85,27 @@ python manage.py makemigrations polls
 在 polls/admin.py 中添加如下代码后，您可以在管理员界面中找到它
 
 ```python
+from django.contrib import admin
+from .models import Video
 
+# Register your models here.
+admin.site.register(Video)
 ```
+
+## Scrapy爬虫
+
+下面这个命令用于创建 Scrapy 项目，名称为 spider
+
+```bash
+scrapy startproject spider
+```
+
+在项目中编写爬虫并测试
+
+```bash
+cd spider
+scrapy genspider myspider www.baidu.com
+scrapy crawl myspider -o test.json # 保存结果到文件
+```
+
+

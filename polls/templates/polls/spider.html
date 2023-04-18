@@ -1,0 +1,6 @@
+{% if code == 0 %}
+    <p>脚本执行成功：</p>
+    <pre>{{ output }}</pre>
+{% else %}
+    <p>脚本执行失败，返回值为 {{ code }}。</p>
+{% endif %}
