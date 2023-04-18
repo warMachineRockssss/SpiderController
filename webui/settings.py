@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "polls.apps.PollsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -74,6 +75,20 @@ WSGI_APPLICATION = "webui.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
+    # The existing Django version does not support MYSQL3.7
+    # please note that MYSQL8 should be installed before use
+    # "default": {
+    #     "ENGINE": "django.db.backends.mysql",
+    #     "NAME": "spidercontroller",
+    #     "USER": "",
+    #     "PASSWORD": "",
+    #     "HOST": "127.0.0.1",
+    #     "PORT": 3306
+    # }
+
+    # We are using splite to store our data, you can use other database to do this like above.
+    # We have configured python's dependency package on mysql
+    # you can directly delete the above comments to use MYSQL
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
@@ -103,9 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "zh-Hans"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Shanghai"
 
 USE_I18N = True
 
