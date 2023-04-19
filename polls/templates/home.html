@@ -1,0 +1,36 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+    <title>Spider Controller</title>
+    <style type="text/css">
+        .outer-main-frame {
+            width: 100vh;
+            height: 100vh;
+            display: flex;
+        }
+
+        .left-menu-frame {
+            width: 20vw;
+            height: 100vh;
+            background-color: #d6ffd6;
+        }
+
+        .main-content-frame {
+            width: 80vw;
+            height: 100vh;
+            background-color: #d9d9ff;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body style="margin: 0 auto;padding: 0 auto;">
+    <div class="outer-main-frame">
+        <div class="left-menu-frame">
+            {% block leftPanel %}
+            {% endblock leftPanel %}
+        </div>
+        <div class="main-content-frame">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </div>
+</body>
