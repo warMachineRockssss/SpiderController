@@ -36,6 +36,11 @@ def runspider(request, spider_name):
     result = subprocess.run(["scrapy", "crawl", spider_name, "-o", file_name + ".jsonlines"], stdout=subprocess.PIPE)
     return render(request, "polls/spider.html", { "code": result.returncode, "output": file_name })
 
+def handleUrl(request):
+    _url=request.GET.get('url',default='0')
+    print(_url)
+    return render(request, "polls/index.html", { "videoInfo": _url })
+
 def ranstr(num):
     H = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     salt = ''

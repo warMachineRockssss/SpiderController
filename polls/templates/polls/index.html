@@ -8,14 +8,15 @@
     </ul>
 {% else %}
     <p>No Data</p>
+    <div>{{ videoInfo }}</div>
 {% endif %}
 {% endblock content %}
 
 {% block leftPanel %}
 <div style="width: 100%;height:100px;padding: 4px 4px 4px 4px;">
-    <form action="/submit_url" method="post">
-        <label style="margin: 4px 0 8px 6px;display: block;font-weight:bold;" for="username">Fetch URL:</label>
-        <input style="width:calc(100% - 10px);padding: 6px 6px 6px 6px;" type="text" id="username" name="username"><br><br>
+    <form action="/submit_url" method="get">
+        <label style="margin: 4px 0 8px 6px;display: block;font-weight:bold;" for="url">Fetch URL:</label>
+        <input style="width:calc(100% - 10px);padding: 6px 6px 6px 6px;" type="text" id="url" name="url"><br><br>
         <input style="width:calc(100% - 10px);padding: 6px 6px 6px 6px;margin-top: -6px;background-color: aqua;border:1px solid #00000073;border-radius: 4px;" type="submit" value="Submit">
     </form>
 </div>
