@@ -33,8 +33,8 @@ def videoUrl(request, video_name):
 def runspider(request, spider_name):
     # 执行脚本 spider_name
     file_name = ranstr(8)
-    result = subprocess.run(["scrapy", "crawl", spider_name, "-o", file_name + ".jsonlines"], stdout=subprocess.PIPE)
-    return render(request, "polls/spider.html", { "code": result.returncode, "output": file_name })
+    result = subprocess.run(["scrapy", "crawl", spider_name, "-o", file_name + ".jsonlines"], capture_output=True)
+    return render(request, "polls/spider.html", { "code": result.returncode, "output": result.stdout })
 
 def handleUrl(request):
     _url=request.GET.get('url',default='0')
