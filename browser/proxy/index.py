@@ -48,3 +48,23 @@ def get_images_chrome(url, limit):
     driver.close()
 
     return image_requests
+
+def get_renderer_page(url):
+    """
+    使用 selenium， 返回渲染后的页面
+    """
+    # 创建 Chrome 浏览器对象
+    options = Options()
+    options.add_argument('--headless')  # 无头模式，不显示浏览器窗口
+    driver = webdriver.Chrome(options=options)
+
+    # 加载页面
+    driver.get(url)
+
+    # 获取渲染后的页面内容
+    rendered_page = driver.page_source
+
+    # 关闭浏览器
+    driver.quit()
+
+    return rendered_page
