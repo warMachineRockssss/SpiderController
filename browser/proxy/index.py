@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 import json
+import time
 
 # 返回网络请求中的图片链接
 def get_images_chrome(url, limit):
@@ -60,6 +61,10 @@ def get_renderer_page(url):
 
     # 加载页面
     driver.get(url)
+
+    # 滚动到最低端
+    driver.execute_script("window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });")
+    time.sleep(1)
 
     # 获取渲染后的页面内容
     rendered_page = driver.page_source
