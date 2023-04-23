@@ -19,6 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     # include 函数允许引用其他 URLconf
-    path("", include("polls.urls")), # 本来是 "polls/" 的，为了便于访问
     path("admin/", admin.site.urls),
+    path("", include("polls.urls")), # 本来是 "polls/" 的，为了便于访问
 ]
