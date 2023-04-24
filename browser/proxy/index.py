@@ -34,9 +34,6 @@ def get_images_chrome(url, limit):
         log = json.loads(entry['message'])['message']
         if 'Network.requestWillBeSent' in log['method']:
             if log['params'].get('type') == 'Image':
-                # print(log['params'].get('request').get('url'))
-                # obj = json.loads(json.dumps({}))
-                # obj['url'] = log['params'].get('request').get('url')
                 image_requests.append(log['params'].get('request').get('url'))
                 count -= 1
             if count < 0:
@@ -73,3 +70,42 @@ def get_renderer_page(url):
     driver.quit()
 
     return rendered_page
+
+
+def get_m3u8_link(url):
+    """
+    通过直接访问网络请求的形式，获取对应url页面中的所有m3u8链接，默认使用Chrome
+    测试链接：https://www.iyf.tv/movie
+    With the selenium, We can get all picture link by network performance
+
+    Args:
+        url: 要请求的网页链接
+    Returns:
+        由链接构成的数组
+    """
+    d = DesiredCapabilities.CHROME
+    d['goog:loggingPrefs'] = { 'performance':'ALL' }
+
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')  # 无头模式，不显示浏览器窗口
+
+    driver = webdriver.Chrome(desired_capabilities=d, options=chrome_options)
+    driver.get(url)
+    logs = driver.get_log('performance')
+
+    # 只保留m3u8相关的请求
+    m3u8_requests = []
+
+    for entry in logs:
+        log = json.loads(entry['message'])['message']
+        if 'Network.requestWillBeSent' in log['method']:
+            if log['params'].get('request') is not None:
+                current_link = log['params'].get('request').get('url').split('?')[0]
+                if current_link.endswith("m3u8"):
+                    m3u8_requests.append(log['params'].get('request').get('url'))
+
+    driver.close()
+    if len(m3u8_requests) > 0:
+        return m3u8_requests[0]
+    else:
+        return 'null'
