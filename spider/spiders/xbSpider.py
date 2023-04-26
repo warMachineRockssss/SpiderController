@@ -10,12 +10,13 @@ class LinkSpider(scrapy.Spider):
     name = 'xbSpider'
 
     def start_requests(self):
-        url = 'https://xbyy.cc/vod/type/movie.html'
+        # 热门视频只有一页
+        url = 'https://xbyy.cc/vod/type/movie-hit.html'
         yield scrapy.Request(url=url, callback=self.parse)
-        time.sleep(5)
-        for i in range(2, 3, 1):
-            time.sleep(5) # 停顿两秒
-            yield scrapy.Request(url=url + '?page=' +str(i), callback=self.parse)
+        # time.sleep(5)
+        # for i in range(2, 3, 1):
+        #     time.sleep(5) # 停顿两秒
+        #     yield scrapy.Request(url=url + '?page=' +str(i), callback=self.parse)
 
     def parse(self, response):
         # 获取渲染后的页面
@@ -30,17 +31,21 @@ class LinkSpider(scrapy.Spider):
         movie_info_list = []
 
         # 这里是解析列表页的所有信息，但是是不完整的，所以我们在下面请求具体页面
-        for item in movie_item_list[0:3]:
-            _poster_link = item.css('.myui-vodlist__thumb.lazyload::attr(style)').extract_first()
-            movie_info_list.append({
-                'movie_name': remove_tags(item.css('.title.text-overflow').extract_first()),
-                'movie_type': "",
-                'movie_addr': re.findall(r'\d+', _poster_link)[0],
-                'movie_time': "",
-                'movie_mark': "",
-                'movie_actor': remove_tags(item.css('.text.text-overflow.text-muted.hidden-xs').extract_first()),
-                'movie_poster': "https://xbyy.cc" + re.search(r'url\("([^"]+)"\)', _poster_link).group(1)
-            })
+        for item in movie_item_list:
+            _link = item.css('.myui-vodlist__thumb.lazyload::attr(href)').extract_first()
+
+            try:
+                movie_info_list.append({
+                    'movie_name': remove_tags(item.css('.title.text-overflow').extract_first()),
+                    'movie_type': "",
+                    'movie_addr': re.search(r"/([^/.]+)\.", _link).group(1),
+                    'movie_time': "",
+                    'movie_mark': "",
+                    'movie_actor': remove_tags(item.css('.text.text-overflow.text-muted.hidden-xs').extract_first()),
+                    'movie_poster': "https://xbyy.cc" + item.css('.myui-vodlist__thumb.lazyload::attr(data-original)').extract_first()
+                })
+            except BaseException:
+                print('解析出错')
 
         # 输出字典数据
         for element in movie_info_list:
