@@ -5,7 +5,7 @@ from browser.proxy.index import get_renderer_page, get_m3u8_link
 import time
 import re
 
-# scrapy crawl z113Spider -o test.jsonlines
+# scrapy crawl z113Spider -o z113.json
 class LinkSpider(scrapy.Spider):
     name = 'z113Spider'
 
@@ -15,9 +15,9 @@ class LinkSpider(scrapy.Spider):
         baseUrl = 'http://www.bizhimarket.cn/vodshow/6--hits------'
         yield scrapy.Request(url=url, callback=self.parse)
         time.sleep(5)
-        # for i in range(2, 95, 1):
-        #     time.sleep(25) # 停顿两秒
-        #     yield scrapy.Request(url=baseUrl + str(i) + '---.html', callback=self.parse)
+        for i in range(2, 95, 1):
+            time.sleep(25) # 停顿两秒
+            yield scrapy.Request(url=baseUrl + str(i) + '---.html', callback=self.parse)
 
     def parse(self, response):
         # 获取渲染后的页面
@@ -49,7 +49,7 @@ class LinkSpider(scrapy.Spider):
                 print('解析出错')
 
         # 输出字典数据
-        for element in movie_info_list[:2]:
+        for element in movie_info_list:
             if element.get('movie_addr') is not None:
                 add_params = {}
                 add_params['movie_name'] = element.get('movie_name')
@@ -77,18 +77,12 @@ class LinkSpider(scrapy.Spider):
         # 将渲染后的页面传递给 Scrapy 的 TextResponse 对象
         rendered_response = scrapy.http.TextResponse(url=response.url, body=_rendered_page, encoding='utf-8')
 
-        labelList = rendered_response.xpath('//p[span[@class="text-muted"] and span[@class="split-line"]]//string()').extract()
-        text = ''
-        for p in response.xpath('//p[span[@class="text-muted"] and span[@class="split-line"]]/string()'):
-            text = text + ')_(' + p.get().strip().replace('\n', '')
-
         yield {
             "movie_name": movie_name,
-            "movie_type": remove_tags(labelList[0]),
+            "movie_type": ' '.join(rendered_response.css('span:contains("类型：") ~ a').css('::text').getall()),
             "movie_addr": __m3u8_link__,
-            "movie_time": remove_tags(labelList[2]),
+            "movie_time": ' '.join(rendered_response.css('span:contains("年份：") ~ a').css('::text').getall()),
             "movie_mark": "",
             "movie_actor": movie_actor,
             "movie_poster": movie_poster,
-            "test": text
         }
