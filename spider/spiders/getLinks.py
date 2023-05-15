@@ -12,7 +12,7 @@ class LinkSpider(scrapy.Spider):
         url = 'https://www.iyf.tv/movie?page='
         for i in range(1, 2, 1):
             time.sleep(2) # 停顿两秒
-            yield scrapy.Request(url=url + str(i), callback=self.parse)
+            yield scrapy.Request(url=url + str(i), meta={"proxy": "http://103.151.13.254:8080"}, callback=self.parse)
 
     def parse(self, response):
         # 获取渲染后的页面
